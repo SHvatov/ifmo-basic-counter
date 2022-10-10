@@ -31,7 +31,7 @@ class BaseController {
                 """
                         <html>
                             <body>
-                                <h3>Hello!</h3>
+                                <h3>Hello, Sergey Khvatov!</h3>
                                 <b>Hostname:</b>${it}<br/>
                             </body>
                         </html>
