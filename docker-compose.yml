@@ -22,11 +22,11 @@ services:
       - "6379:6379"
       - "8001:8001"
 
-  basic-ifmo-counter:
+  ifmo-basic-counter:
     build:
       context: .
       dockerfile: Dockerfile
-    image: basic-ifmo-counter:latest
+    image: ifmo-basic-counter:latest
     environment:
       - SPRING_REDIS_HOST=redis
       - SPRING_DATA_MONGODB_HOST=mongodb
