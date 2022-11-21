@@ -5,5 +5,5 @@ RUN mvn -f /home/app/pom.xml clean package -DskipTests=true
 
 FROM eclipse-temurin:17
 COPY --from=build /home/app/target/basic-counter-0.0.1-SNAPSHOT.jar /usr/local/lib/app.jar
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
