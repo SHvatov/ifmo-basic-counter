@@ -1,5 +1,16 @@
 version: '2.4'
 services:
+  mongodb:
+    platform: linux/x86_64
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./data/mongodb:/data/db
+    ports:
+      - "27017:27017"
+
   redis:
     platform: linux/x86_64
     image: redis/redis-stack:latest
@@ -18,9 +29,11 @@ services:
     image: basic-ifmo-counter:latest
     environment:
       - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_MONGODB_HOST=mongodb
     volumes:
       - ./data:/data
     depends_on:
       - redis
+      - mongodb
     ports:
       - "8081:8081"
