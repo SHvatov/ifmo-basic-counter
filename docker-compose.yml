@@ -1,0 +1,26 @@
+version: '2.4'
+services:
+  redis:
+    platform: linux/x86_64
+    image: redis/redis-stack:latest
+    environment:
+      - REDIS_ARGS=--appendonly yes
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+  basic-ifmo-counter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: basic-ifmo-counter:latest
+    environment:
+      - SPRING_REDIS_HOST=redis
+    volumes:
+      - ./data:/data
+    depends_on:
+      - redis
+    ports:
+      - "8081:8081"

@@ -1,28 +1,45 @@
 package com.shavtov.basic.counter
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.support.atomic.RedisAtomicLong
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.atomic.AtomicLong
 import javax.servlet.http.HttpServletRequest
 
 @SpringBootApplication
 class BasicCounterApplication
 
+@Configuration
+class BasicCounterConfiguration {
+
+    @Bean
+    fun redisCounter(factory: RedisConnectionFactory) =
+        RedisAtomicLong(BACKING_COUNTER_NAME, factory)
+
+    private companion object {
+        const val BACKING_COUNTER_NAME = "ifmo-counter"
+    }
+}
+
 @RestController
 class BaseController {
 
-    private val counter = AtomicLong(0L)
+    @set:Autowired
+    lateinit var redisCounter: RedisAtomicLong
 
     @GetMapping("/")
-    fun get(): Long = counter.get()
+    fun get() = redisCounter.get()
 
     @GetMapping("/stat")
-    fun getAndIncrement(): Long = counter.getAndIncrement()
+    fun getAndIncrement() = redisCounter.andIncrement
 
-    @GetMapping(value = ["/about"], produces = [MediaType.TEXT_HTML_VALUE])
+    @GetMapping(path = ["/about"], produces = [MediaType.TEXT_HTML_VALUE])
     fun about(rq: HttpServletRequest): String =
         rq.requestURL
             .toString()
