@@ -1,7 +1,6 @@
 version: '3.9'
 services:
   mongodb:
-    platform: linux/x86_64
     image: mongo:latest
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
@@ -12,7 +11,6 @@ services:
       - "27017:27017"
 
   redis:
-    platform: linux/x86_64
     image: redis/redis-stack:latest
     environment:
       - REDIS_ARGS=--appendonly yes
