@@ -16,6 +16,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Repository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.net.InetAddress
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 
@@ -70,15 +71,16 @@ class BaseController {
     }
 
     @GetMapping(path = ["/about"], produces = [MediaType.TEXT_HTML_VALUE])
-    fun about(rq: HttpServletRequest): String = rq.requestURL.toString().replace(rq.requestURI, "").let {
-        """
-                        <html>
-                            <body>
-                                <h3>Hello, Sergey Khvatov!</h3>
-                                <b>Hostname:</b>${it}<br/>
-                            </body>
-                        </html>
-                    """.trimIndent()
+    fun about(rq: HttpServletRequest): String {
+        val host = InetAddress.getLocalHost()
+        return """
+            <html>
+                <body>
+                    <h3>Hello, my name is Sergey Khvatov!</h3>
+                    <b>Hostname:</b>${host.hostAddress}, ${host.hostName}<br/>
+                </body>
+            </html>
+            """.trimIndent()
     }
 }
 
